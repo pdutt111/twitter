@@ -10,6 +10,7 @@ var Twit = require('twit');
 var highchartsData=[];
 var tweets={};
 var present={};
+var twitter_completed=false;
 var T = new Twit({
     consumer_key:         'Hp0jCkAYhnXW19BenkcZDV4ST'
     , consumer_secret:      'lPOtnskjemIsTsF8qCOcgz9otwSVWot7AMxmE7nU1jdKqb8iP7'
@@ -22,27 +23,26 @@ T.get('search/tweets', {q: 'limetray', count: 100}, function (err, data, respons
        counters(data.statuses[i]);
     }
     console.log(tweets);
+    twitter_completed=true;
 });
 app.get('/', function(req, res){
     res.sendFile(__dirname +'/index.htm');
 });
-
 io.on('connection', function(socket){
-    console.log('a user connected');
-    Object.keys(tweets).forEach(function(element, key, _array) {
-        highchartsData.push([element,tweets[element]]);
-    });
-    io.emit('init',JSON.stringify(highchartsData));
-    var stream = T.stream('statuses/filter', { track: 'limetray' })
-
-    stream.on('tweet', function (tweet) {
+        Object.keys(tweets).forEach(function (element, key, _array) {
+            highchartsData.push([element, tweets[element]]);
+        });
+        if(twitter_completed)
+        io.emit('init', JSON.stringify(highchartsData));
+        var stream = T.stream('statuses/filter', {track: 'limetray'});
+        stream.on('tweet', function (tweet) {
         console.log(tweet);
         counters(tweet);
         highchartsData=[]
         Object.keys(tweets).forEach(function(element, key, _array) {
             highchartsData.push([element,tweets[element]]);
-        });
-
+        })
+            if(twitter_completed)
         io.emit('init_new',JSON.stringify(highchartsData));
     })
 
