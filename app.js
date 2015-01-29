@@ -9,6 +9,7 @@ var io = require('socket.io')(http);
 var Twit = require('twit');
 var highchartsData=[];
 var tweets={};
+var present={};
 var T = new Twit({
     consumer_key:         'Hp0jCkAYhnXW19BenkcZDV4ST'
     , consumer_secret:      'lPOtnskjemIsTsF8qCOcgz9otwSVWot7AMxmE7nU1jdKqb8iP7'
@@ -37,19 +38,24 @@ io.on('connection', function(socket){
     stream.on('tweet', function (tweet) {
         console.log(tweet);
         counters(tweet);
+        highchartsData=[]
         Object.keys(tweets).forEach(function(element, key, _array) {
             highchartsData.push([element,tweets[element]]);
         });
+
         io.emit('init_new',JSON.stringify(highchartsData));
     })
 
 });
 function counters(data){
-    var tweet_date = new Date(data.created_at);
-    if(tweets[tweet_date.toDateString()]){
-        tweets[tweet_date.toDateString()]++;
-    }else{
-        tweets[tweet_date.toDateString()]=1;
+    if(!present[data.id]) {
+        present[data.id]=true;
+        var tweet_date = new Date(data.created_at);
+        if (tweets[tweet_date.toDateString()]) {
+            tweets[tweet_date.toDateString()]++;
+        } else {
+            tweets[tweet_date.toDateString()] = 1;
+        }
     }
 }
 http.listen(3000, function(){

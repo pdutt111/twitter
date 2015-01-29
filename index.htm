@@ -16,7 +16,7 @@
             var socket = io();
                 socket.on('init', function(msg){
                     var data=JSON.parse(msg);
-                    console.log(data);
+                    console.log(msg);
                     var series = chart.series[0],
                             shift = series.data.length > 20;
 
@@ -34,8 +34,10 @@
                 console.log(msg)
                 var series = chart.series[0],
                         shift = series.data.length > 20;
-
-                for(var i=0;i<data.length;i++) {
+                for(var i=0; i < chart.series[0].points.length; i++){
+                    chart.series[0].points[i].remove()
+                }
+                for(var i=0;i<chart.series[0].data.length;i++) {
                     var dt=new Date(data[i][0]);
                     var point = [dt.getTime(), data[i][1]];
                     chart.series[0].addPoint(point, true, shift);
