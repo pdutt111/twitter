@@ -42,7 +42,7 @@ T.get('search/tweets', {q: 'limetray', count: 100}, function (err, data, respons
 /**
  * declaration of static folder from where the static files shall be served
  */
-app.use(express.static(__dirname + '/public'));
+app.use('/public',express.static(__dirname + '/public'));
 
 /**
  * route to serve index.html
