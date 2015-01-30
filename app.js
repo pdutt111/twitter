@@ -55,6 +55,7 @@ app.get('/', function(req, res){
  * socket.io functions to send data through a socket upon connections of a client but wont refresh page if tweets are not loaded yet
  */
 io.on('connection', function(socket){
+        highchartsData=[];
         Object.keys(tweets).forEach(function (element, key, _array) {
             highchartsData.push([element, tweets[element]]);
         });
