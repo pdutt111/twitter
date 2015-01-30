@@ -60,17 +60,17 @@ io.on('connection', function(socket){
         });
         if(twitter_completed)
         io.emit('init', JSON.stringify(highchartsData));
-        //var stream = T.stream('statuses/filter', {track: 'limetray'});
-        //stream.on('tweet', function (tweet) {
-        //console.log(tweet);
-        //counters(tweet);
-        //highchartsData=[]
-        //Object.keys(tweets).forEach(function(element, key, _array) {
-        //    highchartsData.push([element,tweets[element]]);
-        //})
-        //    if(twitter_completed)
-        //io.emit('init_new',JSON.stringify(highchartsData));
-        //});
+        var stream = T.stream('statuses/filter', {track: 'limetray'});
+        stream.on('tweet', function (tweet) {
+        console.log(tweet);
+        counters(tweet);
+        highchartsData=[]
+        Object.keys(tweets).forEach(function(element, key, _array) {
+            highchartsData.push([element,tweets[element]]);
+        })
+            if(twitter_completed)
+        io.emit('init_new',JSON.stringify(highchartsData));
+        });
 
 });
 /**
