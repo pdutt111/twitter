@@ -21,8 +21,9 @@
                             shift = series.data.length > 20;
 
                     for(var i=0;i<data.length;i++) {
-                            var dt=new Date(data[i][0]);
-                            var point = [dt.getTime(), data[i][1]];
+                        var dt=new Date(data[i][0]);
+                        var dt1=Date.UTC(dt.getFullYear(),dt.getMonth(),dt.getDate(),0,0,0,0);
+                        var point = [dt1, data[i][1]];
                             chart.series[0].addPoint(point, true, shift);
                     }
 
@@ -39,7 +40,8 @@
                 }
                 for(var i=0;i<data.length;i++) {
                     var dt=new Date(data[i][0]);
-                    var point = [dt.getTime(), data[i][1]];
+                    var dt1=Date.UTC(dt.getFullYear(),dt.getMonth(),dt.getDate(),0,0,0,0);
+                    var point = [dt1, data[i][1]];
                     chart.series[0].addPoint(point, true, shift);
                 }
 
@@ -59,9 +61,7 @@
                         text: 'twitter counts'
                     },
                     xAxis: {
-                        type: 'datetime',
-                        tickPixelInterval: 150,
-                        maxZoom: 20 * 1000
+                        type: 'datetime'
                     },
                     yAxis: {
                         minPadding: 0.2,
